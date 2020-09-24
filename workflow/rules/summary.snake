@@ -1,0 +1,20 @@
+rule summary:
+	input:
+		list = "list_all.txt",
+		mlst = expand("mlst/{sample}.tsv", sample=IDS),
+		amrfinder = expand("amrfinder_out/{sample}.tsv", sample=IDS),
+		quast = expand("quast_out/{sample}", sample=IDS),
+		coverage = expand("coverage_out/{sample}.txt", sample=IDS),
+		kraken = expand("kraken_out/{sample}_kraken2_report.txt", sample=IDS),
+		serotype = "Results_FinalResults.txt",
+		metadata = "config/cleaned_metadata_42.csv"
+	output:
+		"summary.csv"
+	conda:
+		"../envs/python.yaml"
+	log:
+		"logs/summary.log"
+	shell:
+		"""
+		python workflow/scripts/summary.py {input.list} > {output}
+		"""

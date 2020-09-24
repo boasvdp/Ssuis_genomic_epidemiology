@@ -1,0 +1,16 @@
+rule roary:
+	input:
+		expand("prokka_out/{sample}/{sample}.gff", sample=INCLUDE)
+	output:
+		directory("roary_out")
+	conda:
+		"../envs/roary.yaml"
+	params:
+		general = config["roary"]["general"]
+	log:
+		"logs/roary.log"
+	threads: 16
+	shell:
+		"""
+		roary -p {threads} {params.general} -f {output} {input} 2>&1>{log}
+		"""

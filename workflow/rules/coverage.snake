@@ -1,0 +1,18 @@
+rule coverage:
+	input:
+		fw = "ATQT_reads/{sample}_ATQT_R1.fastq.gz",
+		rv = "ATQT_reads/{sample}_ATQT_R2.fastq.gz",
+		assembly = "genomes/{sample}.fasta"
+	output:
+		"coverage_out/{sample}.txt"
+	conda:
+		"../envs/coverage.yaml"
+	params:
+		minimap_x = "sr"
+	log:
+		"logs/coverage/{sample}.log"
+	threads: 8
+	shell:
+		"""
+		minimap2 -a -x {params.minimap_x} -t {threads} {input.assembly} {input.fw} {input.rv} | samtools sort -l 0 --threads {threads} | bedtools genomecov -d -ibam stdin | awk '{{t += $3}} END {{print t/NR}}' 1>{output} 2>{log}
+		"""

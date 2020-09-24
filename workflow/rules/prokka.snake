@@ -1,0 +1,20 @@
+rule prokka:
+	input:
+		"genomes/{sample}.fasta"
+	output:
+		"prokka_out/{sample}/{sample}.gff"
+	conda:
+		"../envs/prokka.yaml"
+	params:
+		kingdom = config["prokka"]["kingdom"],
+		genus = config["prokka"]["genus"],
+		species = config["prokka"]["species"],
+		prefix = "{sample}",
+		outdir = "prokka_out/{sample}"
+	log:
+		"logs/prokka/{sample}.log"
+	threads: 8
+	shell:
+		"""
+		prokka --force --outdir {params.outdir} --genus {params.genus} --species {params.species} --kingdom {params.kingdom} --cpus {threads} --prefix {params.prefix} {input} 2>&1>{log}
+		"""

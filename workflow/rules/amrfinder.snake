@@ -1,0 +1,15 @@
+rule amrfinder:
+	input:
+		"genomes/{sample}.fasta"
+	output:
+		"amrfinder_out/{sample}.tsv"
+	conda:
+		"../envs/amrfinder.yaml"
+	log:
+		"logs/amrfinder/{sample}.log"
+	threads: 16
+	shell:
+		"""
+		amrfinder -u
+		amrfinder --threads {threads} --nucleotide {input} --output {output} 2>&1>{log}
+		"""

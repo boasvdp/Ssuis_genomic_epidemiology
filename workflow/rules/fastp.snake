@@ -1,0 +1,21 @@
+rule fastp:
+	input:
+		fw = "raw_reads/{sample}_1.fastq.gz",
+		rv = "raw_reads/{sample}_2.fastq.gz"
+	output:
+		fw = "ATQT_reads/{sample}_ATQT_R1.fastq.gz",
+		rv = "ATQT_reads/{sample}_ATQT_R2.fastq.gz",
+		json = "fastp_out/{sample}_fastp.json",
+		html = "fastp_out/{sample}_fastp.html"
+	conda:
+		"../envs/fastp.yaml"
+	params:
+		general = "--disable_length_filtering",
+		compression_level = "9"
+	log:	
+		"logs/fastp/fastp_{sample}.log"
+	threads: 8
+	shell:
+		"""
+		fastp -w {threads} -z {params.compression_level} -i {input.fw} -o {output.fw} -I {input.rv} -O {output.rv} {params.general} --html {output.html} --json {output.json} 2>&1>{log}
+		"""

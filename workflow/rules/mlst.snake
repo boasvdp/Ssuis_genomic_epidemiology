@@ -1,0 +1,14 @@
+rule mlst:
+	input:
+		assembly = "genomes/{sample}.fasta"
+	output:
+		mlst = "mlst/{sample}.tsv"
+	conda:
+		"../envs/mlst.yaml"
+	log:
+		"logs/mlst/mlst_{sample}.log"
+	threads: 1
+	shell:
+		"""
+		mlst {input.assembly} 1> {output.mlst} 2>{log}
+		"""

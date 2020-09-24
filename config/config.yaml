@@ -1,0 +1,32 @@
+fastp:
+ compression_level: "9"
+ general: "--disable_length_filtering"
+
+kraken:
+ general: "--output - --fastq-input --gzip-compressed --paired"
+ db: "/home/vdputten/kraken_db_nohuman"
+
+shovill:
+ minlen: "500"
+ ram: "64"
+ depth: "100"
+ assembler: "spades"
+ tmpdir: "$TMPDIR"
+
+prokka:
+ kingdom: "Bacteria"
+ genus: "Streptococcus"
+ species: "suis"
+
+abricate:
+ minid: "95"
+ mincov: "60"
+
+roary:
+ general: "-z -g 500000 -e -n -v"
+
+iqtree:
+ prefix: "Ssuis"
+
+parse_itol:
+ ignore: "pct_species,reads_species,number_contigs,N50,largest_contig,total_size,coverage"

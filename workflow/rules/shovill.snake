@@ -1,0 +1,23 @@
+rule shovill:
+	input:
+		fw = "ATQT_reads/{sample}_ATQT_R1.fastq.gz",
+		rv = "ATQT_reads/{sample}_ATQT_R2.fastq.gz"
+	output:
+		assembly = "genomes/{sample}.fasta",
+		shovill = directory("shovill_out/{sample}")
+	params:
+		minlen = config["shovill"]["minlen"],
+		ram = config["shovill"]["ram"],
+		depth = config["shovill"]["depth"],
+		assembler = config["shovill"]["assembler"],
+		tmpdir = config["shovill"]["tmpdir"]
+	conda:
+		"../envs/shovill.yaml"
+	log:
+		"logs/shovill/{sample}.log"
+	threads: 16
+	shell:
+		"""
+		shovill --assembler {params.assembler} --outdir {output.shovill} --tmp {params.tmpdir} --depth {params.depth} --cpus {threads} --ram {params.ram} --minlen {params.minlen} --R1 {input.fw} --R2 {input.rv} 2>&1>{log}
+		cp {output.shovill}/contigs.fa {output.assembly}
+		"""

@@ -1,0 +1,19 @@
+rule iqtree:
+	input:
+		"roary_out"
+	output:
+		directory("iqtree_out")
+	conda:
+		"../envs/iqtree_snp-sites.yaml"
+	params:
+		prefix = config["iqtree"]["prefix"]
+	log:
+		"logs/iqtree.log"
+	threads: 16
+	shell:
+		"""
+		mkdir -p {output} && cd {output}
+		snp-sites ../{input}/core_gene_alignment.aln > core_gene_alignment_snp-sites.aln
+		iqtree -fconst $(snp-sites -C ../{input}/core_gene_alignment.aln) -nt AUTO -pre {params.prefix} -B 1000 -s core_gene_alignment_snp-sites.aln 2>&1>../{log}
+		if [ -f {params.prefix}.treefile ]; then echo "{output}/{params.prefix}.treefile exists"; else exit 1; fi
+		"""

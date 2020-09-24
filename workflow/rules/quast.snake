@@ -1,0 +1,14 @@
+rule quast:
+	input:
+		"genomes/{sample}.fasta"
+	output:
+		directory("quast_out/{sample}")
+	conda:
+		"../envs/quast.yaml"
+	log:
+		"logs/quast/{sample}.log"
+	threads: 8
+	shell:
+		"""
+		quast --threads {threads} -o {output} {input} 2>&1>{log}
+		"""

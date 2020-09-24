@@ -1,0 +1,11 @@
+rule snpdists:
+	input:
+		"roary_out"
+	output:
+		"snp-dists_out/snp-dists.tsv"
+	conda:
+		"../envs/snpdists.yaml"
+	shell:
+		"""
+		snp-dists {input}/core_gene_alignment.aln > {output}
+		"""

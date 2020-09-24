@@ -1,0 +1,27 @@
+rule multiqc:
+	input:
+		fastp = expand("fastp_out/{sample}_fastp.json", sample=IDS),
+		quast = expand("quast_out/{sample}", sample=IDS)
+	output:
+		fastp = "multiqc_out/multiqc_fastp.html",
+		quast = "multiqc_out/multiqc_quast.html",
+		fastp_data = directory("multiqc_out/multiqc_fastp_data"),
+		quast_data = directory("multiqc_out/multiqc_quast_data")
+	conda:
+		"../envs/multiqc.yaml"
+	log:
+		fastp = "logs/multiqc_fastp.log",
+		quast = "logs/multiqc_quast.log"
+	shell:
+		"""
+		OUTPUT={output.fastp}
+		DIR=${{OUTPUT%/*}}
+		NAME=${{OUTPUT##*/}}
+		INPUT=$(for i in {input.fastp}; do echo ${{i%/*}}; done | sort | uniq)
+		multiqc -n ${{NAME}} -o ${{DIR}} ${{INPUT}} 2>&1>{log.fastp}
+		OUTPUT={output.quast}
+		DIR=${{OUTPUT%/*}}
+		NAME=${{OUTPUT##*/}}
+		INPUT=$(for i in {input.quast}; do echo ${{i%/*}}; done | sort | uniq)
+		multiqc -n ${{NAME}} -o ${{DIR}} ${{INPUT}} 2>&1>{log.quast}
+		"""

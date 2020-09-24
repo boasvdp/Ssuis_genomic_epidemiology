@@ -1,0 +1,18 @@
+rule kraken2:
+	input:
+		fw = "ATQT_reads/{sample}_ATQT_R1.fastq.gz",
+		rv = "ATQT_reads/{sample}_ATQT_R2.fastq.gz",
+		db = "/home/vdputten/kraken_db_nohuman"
+	output:
+		report = "kraken_out/{sample}_kraken2_report.txt"
+	conda:
+		"../envs/kraken.yaml"
+	params:
+		general = "--output - --gzip-compressed --paired"
+	log:
+		"logs/kraken2/kraken2_{sample}.log"
+	threads: 6
+	shell:
+		"""
+		kraken2 --db {input.db} {params.general} --threads {threads} --report {output.report} {input.fw} {input.rv} 2>&1>{log}
+		"""
