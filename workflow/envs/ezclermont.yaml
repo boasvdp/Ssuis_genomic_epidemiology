@@ -1,4 +1,0 @@
-channels:
-- bioconda
-dependencies:
-- ezclermont=0.4.3

@@ -3,4 +3,4 @@ channels:
 - bioconda
 dependencies:
 - pandas
-- colorbrewer=0.2
+- itolparser=0.1.3

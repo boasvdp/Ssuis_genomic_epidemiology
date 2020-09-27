@@ -1,6 +1,6 @@
 rule summary:
 	input:
-		list = "list_all.txt",
+		list = "list_included.txt",
 		mlst = expand("mlst/{sample}.tsv", sample=IDS),
 		amrfinder = expand("amrfinder_out/{sample}.tsv", sample=IDS),
 		quast = expand("quast_out/{sample}", sample=IDS),

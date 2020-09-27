@@ -1,0 +1,20 @@
+rule abricate_customdb:
+	input:
+		db = "abricate_db_Ssuis_virulence",
+		genome = "genomes/{sample}.fasta"
+	output:
+		final = "abricate_virulence_out/{sample}.tsv",
+		raw = "abricate_virulence_raw_out/{sample}.tsv"
+	conda:
+		"../envs/abricate.yaml"
+	params:
+		minid = config["abricate"]["minid"],
+		mincov = config["abricate"]["mincov"]
+	log:
+		"logs/abricate/{sample}.log"
+	threads: 8
+	shell:
+		"""
+		abricate --threads {threads} --datadir . --db {input.db} --nopath --mincov {params.mincov} {input.genome} > {output.raw}
+		bash workflow/scripts/filter_abricate.sh {output.raw} {params.minid} > {output.final}
+		"""

@@ -21,29 +21,30 @@ isolates.close()
 
 print('isolate', 'country', 'year', 'source', 'host_birthyear', 'host_sex', 'host_health', 'occupational_risk', 'species', 'pct_species', 'reads_species', 'serotype', 'ST', 'epf', 'mrp', 'sly', 'erm_genes', 'tet_genes', 'ant_genes', 'dfr_genes', 'number_contigs', 'N50', 'largest_contig', 'total_size', 'coverage', sep = ',')
 
+def customreadlines(file):
+  tmp = open(file)
+  return tmp.readlines()
+  tmp.close()
+
 for isolate in isolate_list:
   # Remove trailing newline
   isolate = isolate.rstrip('\n')
 
   # Get metadata
-  m = open(args.metadata)
-  lines = m.readlines()
-  m.close()
+  lines = customreadlines(args.metadata)
 
   for line in lines:
-    if isolate == line.split(',')[0]:
-      COUNTRY = line.split(',')[1]
-      YEAR = line.split(',')[3]
-      SOURCE = line.split(',')[4]
-      HOST_BIRTHYEAR = line.split(',')[5]
-      HOST_SEX = line.split(',')[6]
-      HOST_HEALTH = line.split(',')[7]
-      OCC_RISK = line.split(',')[8].rstrip('\n')
+    if isolate == line.split(';')[0]:
+      COUNTRY = line.split(';')[1]
+      YEAR = line.split(';')[3]
+      SOURCE = line.split(';')[4]
+      HOST_BIRTHYEAR = line.split(';')[5]
+      HOST_SEX = line.split(';')[6]
+      HOST_HEALTH = line.split(';')[7]
+      OCC_RISK = line.split(';')[8].rstrip('\n')
 
   # Get Kraken2
-  k = open(args.kraken + '/' + isolate + '_kraken2_report.txt', 'r')
-  lines = k.readlines()
-  k.close()
+  lines = customreadlines(args.kraken + '/' + isolate + '_kraken2_report.txt')
 
   for line in lines:
     if line.split('\t')[3] == 'S':
@@ -58,9 +59,7 @@ for isolate in isolate_list:
   t.close()
 
   # Serotype
-  s = open(args.serotype)
-  lines = list(s.readlines())
-  s.close()
+  lines = list(customreadlines(args.serotype))
 
   for line in lines:
     if isolate == line.split('\t')[0]:
@@ -70,9 +69,7 @@ for isolate in isolate_list:
       SLY = line.split('\t')[13].rstrip('\n')
 
   # Get AMR genes and put lines in a list to reuse
-  a = open(args.amrfinder + '/' + isolate + ".tsv")
-  lines = list(a.readlines())
-  a.close()
+  lines = list(customreadlines(args.amrfinder + '/' + isolate + ".tsv"))
 
   # erm(B) genes
   ERM = ''
@@ -111,9 +108,7 @@ for isolate in isolate_list:
     DFR = 'None'
 
   # Get quast
-  q = open(args.quast + '/' + isolate + "/report.tsv")
-  lines = q.readlines()
-  q.close()
+  lines = customreadlines(args.quast + '/' + isolate + "/report.tsv")
 
   for line in lines:
     if line.split('\t')[0] == '# contigs':

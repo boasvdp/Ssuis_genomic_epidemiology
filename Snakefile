@@ -12,8 +12,8 @@ for line in lines:
   if line in INCLUDE:
     INCLUDE.remove(line)
 
-print("All samples: " + str(IDS))
-print("Included samples: " + str(INCLUDE))
+#print("All samples: " + str(IDS))
+#print("Included samples: " + str(INCLUDE))
 
 rule all:
 	input:
@@ -24,6 +24,7 @@ rule all:
 		expand("mlst/{sample}.tsv", sample=IDS),
 		expand("coverage_out/{sample}.txt", sample=IDS),
 		expand("abricate_out/{sample}.tsv", sample=IDS),
+		expand("abricate_virulence_out/{sample}.tsv", sample=IDS),
 		"roary_out",
 		"iqtree_out",
 		"snp-dists_out/snp-dists.tsv",
@@ -40,9 +41,10 @@ include: "workflow/rules/mlst.snake"
 include: "workflow/rules/coverage.snake"
 include: "workflow/rules/prokka.snake"
 include: "workflow/rules/abricate.snake"
+include: "workflow/rules/abricate_customdb.snake"
 include: "workflow/rules/multiqc.snake"
 include: "workflow/rules/roary.snake"
 include: "workflow/rules/iqtree.snake"
 include: "workflow/rules/snpdists.snake"
 include: "workflow/rules/summary.snake"
-include: "workflow/rules/parse_itol.snake"
+include: "workflow/rules/itolparser.snake"

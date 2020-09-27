@@ -1,0 +1,15 @@
+rule itolparser:
+	input:
+		"summary.csv"
+	output:
+		directory("itol_out")
+	conda:
+		"../envs/python.yaml"
+	log:
+		"logs/itolparser.log"
+	params:
+		continuous = config["parse_itol"]["continuous"]
+	shell:
+		"""
+		itolparser -d ',' --margin 10 --continuous {params.continuous} --outdir {output} --input {input} 2>&1>{log}
+		"""
