@@ -29,7 +29,8 @@ rule all:
 		"iqtree_out",
 		"snp-dists_out/snp-dists.tsv",
 		"summary.csv",
-		"itol_out"
+		"itol_out",
+		"abricate_summary/abricate_virulence_phandango.csv"
 
 ## Workflow ##
 include: "workflow/rules/fastp.snake"
@@ -48,3 +49,4 @@ include: "workflow/rules/iqtree.snake"
 include: "workflow/rules/snpdists.snake"
 include: "workflow/rules/summary.snake"
 include: "workflow/rules/itolparser.snake"
+include: "workflow/rules/abricate_to_phandango.snake"
