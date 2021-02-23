@@ -7,7 +7,8 @@ rule summary:
 		coverage = expand("coverage_out/{sample}.txt", sample=IDS),
 		kraken = expand("kraken_out/{sample}_kraken2_report.txt", sample=IDS),
 		serotype = "Results_FinalResults.txt",
-		metadata = "config/cleaned_metadata_42.csv"
+		metadata = "config/cleaned_metadata_62.csv",
+		st_to_cc = "config/ST_to_CC.csv"
 	output:
 		"summary.csv"
 	conda:

@@ -1,0 +1,15 @@
+rule abricate_to_phandango:
+	input:
+		expand("abricate_virulence_out/{sample}.tsv", sample=INCLUDE)
+	output:
+		abricatesummary = "abricate_summary/summary.tsv",
+		phandango = "abricate_summary/abricate_virulence_phandango.csv"
+	conda:
+		"../envs/python.yaml"
+	log:
+		"logs/abricate_to_phandango.log"
+	shell:
+		"""
+		abricate --summary {input} > {output.abricatesummary}
+		python workflow/scripts/abricate_to_phandango.py --output {output.phandango} {output.abricatesummary}
+		"""

@@ -9,9 +9,10 @@ parser.add_argument('--mlst', dest="mlst", help="mlst output directory", type=st
 parser.add_argument('--amrfinder', dest="amrfinder", help="AMRFinder output directory", type=str, default='amrfinder_out')
 parser.add_argument('--serotype', dest="serotype", help="Results file from Ssuis_serotyping pipeline", type=str, default='Results_FinalResults.txt')
 parser.add_argument('--quast', dest="quast", help="Quast directory", type=str, default='quast_out')
-parser.add_argument('--metadata', dest="metadata", help="Metadata file", type=str, default='config/cleaned_metadata_42.csv')
+parser.add_argument('--metadata', dest="metadata", help="Metadata file", type=str, default='config/cleaned_metadata_62.csv')
 parser.add_argument('--coverage', dest="coverage", help="Coverage directory", type=str, default='coverage_out')
 parser.add_argument('--kraken', dest="kraken", help="Kraken2 output directory", type=str, default='kraken_out')
+parser.add_argument('--st-to-cc', dest="stcc", help="Csv conversion table for ST to CC", type=str, default='config/ST_to_CC.csv')
 
 args = parser.parse_args()
 
@@ -19,7 +20,7 @@ isolates = open(args.list, "r+")
 isolate_list = list(isolates.readlines())
 isolates.close()
 
-print('isolate', 'country', 'year', 'source', 'host_birthyear', 'host_sex', 'host_health', 'occupational_risk', 'species', 'pct_species', 'reads_species', 'serotype', 'ST', 'epf', 'mrp', 'sly', 'erm_genes', 'tet_genes', 'ant_genes', 'dfr_genes', 'number_contigs', 'N50', 'largest_contig', 'total_size', 'coverage', sep = ',')
+print('isolate', 'country', 'year', 'source', 'host_birthyear', 'host_sex', 'host_health', 'occupational_risk', 'species', 'pct_species', 'reads_species', 'serotype', 'ST', 'CC', 'epf', 'mrp', 'sly', 'erm_genes', 'tet_genes', 'ant_genes', 'dfr_genes', 'number_contigs', 'N50', 'largest_contig', 'total_size', 'coverage', sep = ',')
 
 def customreadlines(file):
   tmp = open(file)
@@ -57,6 +58,13 @@ for isolate in isolate_list:
   t = open(args.mlst + '/' + isolate + ".tsv")
   ST = str(t.readline().split('\t')[2])
   t.close()
+
+  # Convert ST to CC
+  lines = list(customreadlines(args.stcc))
+
+  for line in lines:
+    if ST == line.split(';')[0]:
+      CC = line.split(';')[1].rstrip('\n')
 
   # Serotype
   lines = list(customreadlines(args.serotype))
@@ -125,4 +133,4 @@ for isolate in isolate_list:
   COVERAGE = str(c.readline().rstrip('\n'))
   c.close()
 
-  print(isolate, COUNTRY, YEAR, SOURCE, HOST_BIRTHYEAR, HOST_SEX, HOST_HEALTH, OCC_RISK, SPECIES, PCT, READS, SEROTYPE, ST, EPF, MRP, SLY, ERM, TET, ANT, DFR, CONTIGS, N50, LARGEST, SIZE, COVERAGE, sep = ',')
+  print(isolate, COUNTRY, YEAR, SOURCE, HOST_BIRTHYEAR, HOST_SEX, HOST_HEALTH, OCC_RISK, SPECIES, PCT, READS, SEROTYPE, ST, CC, EPF, MRP, SLY, ERM, TET, ANT, DFR, CONTIGS, N50, LARGEST, SIZE, COVERAGE, sep = ',')

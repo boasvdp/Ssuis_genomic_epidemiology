@@ -3,4 +3,4 @@ channels:
 - bioconda
 dependencies:
 - pandas
-- itolparser=0.1.3
+- itolparser=0.1.6

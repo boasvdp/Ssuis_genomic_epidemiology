@@ -3,5 +3,5 @@ channels:
 - bioconda
 - defaults
 dependencies:
-- prokka=1.14.0
+- prokka=1.14.6
 - blast=2.9

@@ -29,4 +29,4 @@ iqtree:
  prefix: "Ssuis"
 
 parse_itol:
- ignore: "pct_species,reads_species,number_contigs,N50,largest_contig,total_size,coverage"
+ continuous: "pct_species,reads_species,number_contigs,N50,largest_contig,total_size,coverage,year,host_birthyear"
